@@ -52,10 +52,6 @@ export class RegistroAdminComponent implements OnInit {
     console.log("Admin: ", this.admin);
   }
 
-  public regresar(){
-    this.location.back();
-  }
-
   //Funciones para password
   public showPassword()
   {
@@ -81,41 +77,41 @@ export class RegistroAdminComponent implements OnInit {
     }
   }
 
+  public regresar(){
+    this.location.back();
+  }
+
   public registrar(){
     this.errors = {};
     this.errors = this.administradoresService.validarAdmin(this.admin, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
     }
-    // Validar si las contraseñas coinciden
-
-    if(this.admin.password != this.admin.confirmar_password){
-      alert('Las contraseñas no coinciden');
-      return false;
+    //Validar la contraseña
+    if(this.admin.password == this.admin.confirmar_password){
+      // Ejecutamos el servicio de registro
+      this.administradoresService.registrarAdmin(this.admin).subscribe(
+        (response) => {
+          // Redirigir o mostrar mensaje de éxito
+          alert("Administrador registrado exitosamente");
+          console.log("Administrador registrado: ", response);
+          if(this.token && this.token !== ""){
+            this.router.navigate(["administrador"]);
+          }else{
+            this.router.navigate(["/"]);
+          }
+        },
+        (error) => {
+          // Manejar errores de la API
+          alert("Error al registrar administrador");
+          console.error("Error al registrar administrador: ", error);
+        }
+      );
+    }else{
+      alert("Las contraseñas no coinciden");
+      this.admin.password="";
+      this.admin.confirmar_password="";
     }
-
-    // Consumir servicio para registrar administradores
-    this.administradoresService.registrarAdmin(this.admin).subscribe({
-      next: (response:any) => {
-        //Aquí va la ejecución del servicio si todo es correcto
-        alert('Administrador registrado con éxito');
-        console.log("Admin registrado",response);
-
-        //Validar si se registro que entonces navegue a la lista de administradores
-        if(this.token != ""){
-          this.router.navigate(['administrador']);
-        }else{
-          this.router.navigate(['/']);
-        }
-      },
-      error: (error:any) => {
-        if(error.status === 422){
-          this.errors = error.error.errors;
-        } else {
-          alert('Error al registrar el administrador');
-        }
-      }
-    });
   }
 
   public actualizar(){
