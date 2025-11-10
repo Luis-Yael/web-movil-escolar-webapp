@@ -25,6 +25,11 @@ import {MatNativeDateModule, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table';
+// Paginación
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+//Para el paginator en español
+import { getSpanishPaginatorIntl } from './shared/spanish-paginator-intl';
 //Ngx-cookie-service
 import { CookieService } from 'ngx-cookie-service';
 
@@ -35,6 +40,7 @@ import { AdminScreenComponent } from './screens/admin-screen/admin-screen.compon
 import { AlumnosScreenComponent } from './screens/alumnos-screen/alumnos-screen.component';
 import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-screen.component';
 import { NavbarUserComponent } from './partials/navbar-user/navbar-user.component';
+import { SidebarComponent } from './partials/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +56,8 @@ import { NavbarUserComponent } from './partials/navbar-user/navbar-user.componen
     AdminScreenComponent,
     AlumnosScreenComponent,
     MaestrosScreenComponent,
-    NavbarUserComponent
+    NavbarUserComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -68,11 +75,14 @@ import { NavbarUserComponent } from './partials/navbar-user/navbar-user.componen
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [
     CookieService,
     { provide: MAT_DATE_LOCALE, useValue: 'es-MX' },
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     provideNgxMask()
   ],
   bootstrap: [AppComponent]
