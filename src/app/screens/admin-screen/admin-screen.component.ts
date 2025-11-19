@@ -10,8 +10,8 @@ import { FacadeService } from 'src/app/services/facade.service';
 })
 export class AdminScreenComponent implements OnInit {
   // Variables y métodos del componente
-  public name_user:string = "";
-  public lista_admins:any[]= [];
+  public name_user: string = "";
+  public lista_admins: any[] = [];
 
   constructor(
     public facadeService: FacadeService,
@@ -28,22 +28,22 @@ export class AdminScreenComponent implements OnInit {
   }
 
   //Obtener lista de usuarios
-  public obtenerAdmins(){
+  public obtenerAdmins() {
     this.administradoresService.obtenerListaAdmins().subscribe(
-      (response)=>{
+      (response) => {
         this.lista_admins = response;
         console.log("Lista users: ", this.lista_admins);
-      }, (error)=>{
+      }, (error) => {
         alert("No se pudo obtener la lista de administradores");
       }
     );
   }
 
-  public goEditar(idUser: number){
+  public goEditar(idUser: number) {
     this.router.navigate(["registro-usuarios/administrador/"+idUser]);
   }
 
-  public delete(idUser: number){
+  public delete(idUser: number) {
 
   }
 

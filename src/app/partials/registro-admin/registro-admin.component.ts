@@ -44,12 +44,17 @@ export class RegistroAdminComponent implements OnInit {
       //Al iniciar la vista asignamos los datos del user
       this.admin = this.datos_user;
     }else{
+      // Si no va a this.editar, entonces inicializamos el JSON para registro nuevo
       this.admin = this.administradoresService.esquemaAdmin();
       this.admin.rol = this.rol;
       this.token = this.facadeService.getSessionToken();
     }
     //Imprimir datos en consola
     console.log("Admin: ", this.admin);
+  }
+
+  public regresar(){
+    this.location.back();
   }
 
   //Funciones para password
@@ -77,16 +82,14 @@ export class RegistroAdminComponent implements OnInit {
     }
   }
 
-  public regresar(){
-    this.location.back();
-  }
-
   public registrar(){
     this.errors = {};
     this.errors = this.administradoresService.validarAdmin(this.admin, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
     }
+    // Validar si las contraseñas coinciden
+
     //Validar la contraseña
     if(this.admin.password == this.admin.confirmar_password){
       // Ejecutamos el servicio de registro
@@ -115,6 +118,26 @@ export class RegistroAdminComponent implements OnInit {
   }
 
   public actualizar(){
+    // Validación de los datos
+    this.errors = {};
+    this.errors = this.administradoresService.validarAdmin(this.admin, this.editar);
+    if(Object.keys(this.errors).length > 0){
+      return false;
+    }
+    // Ejecutamos el servicio de actualización
+    this.administradoresService.actualizarAdmin(this.admin).subscribe(
+      (response) => {
+        // Redirigir o mostrar mensaje de éxito
+        alert("Administrador actualizado exitosamente");
+        console.log("Administrador actualizado: ", response);
+        this.router.navigate(["administrador"]);
+      },
+      (error) => {
+        // Manejar errores de la API
+        alert("Error al actualizar administrador");
+        console.error("Error al actualizar administrador: ", error);
+      }
+    );
 
   }
 
